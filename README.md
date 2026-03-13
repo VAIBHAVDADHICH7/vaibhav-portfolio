@@ -1,6 +1,10 @@
+# vaibhav-portfolio
+this is my portfolio website
+>>>>>>> e6dac0bfd2be49f5c8e25b77e1a94b79f3321aaa
+=======
 # Vaibhav Portfolio
 
-Personal portfolio website built with **Astro**, **React**, and **Tailwind CSS**.
+Personal portfolio website built with **Astro**, **React**, and **Tailwind CSS**. This is my portfolio website.
 
 ## 🚀 Features
 - Responsive design
@@ -32,4 +36,8 @@ npm run preview  # Preview production build
 - Tailwind CSS 3.4
 - Framer Motion
 
-Live demo: [Coming soon](https://github.com/VAIBHAVDADHICH7/vaibhav-portfolio)
+Live demo: [Coming soon](https://vaibhav-portfolio.vercel.app)
+=======
+# vaibhav-portfolio
+this is my portfolio website
+>>>>>>> e6dac0bfd2be49f5c8e25b77e1a94b79f3321aaa
