@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import App from '../components/App.jsx';
+---
+
+<Layout title="Vaibhav Dadhich | Digital Architect | UI/UX Designer & Web Developer">
+  <!-- Local Tailwind compiled at build time - no CDN -->
+  <App client:idle />
+  
+  <!-- Noscript fallback for SEO -->
+  <noscript>
+    <div style="padding: 40px; text-align: center; color: #e4e4e7; background: #000; min-height: 100vh;">
+      <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Vaibhav Dadhich</h1>
+      <h2 style="font-size: 1.5rem; color: #a1a1aa; margin-bottom: 20px;">UI/UX Designer & Web Developer</h2>
+      <p style="max-width: 600px; margin: 0 auto 20px; line-height: 1.6;">
+        A passionate tech enthusiast and visionary entrepreneur driven to build scalable, future-ready solutions that merge technology, sustainability, and innovation.
+      </p>
+      <p style="color: #71717a;">Currently running The Green Balance while pursuing B.Tech CSE at Rajasthan Technical University.</p>
+    </div>
+  </noscript>
+</Layout>

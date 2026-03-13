@@ -1,0 +1,196 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { 
+  title, 
+  description = "Vaibhav Dadhich is a UI/UX Designer & Web Developer specializing in creating scalable, future-ready solutions that merge technology, sustainability, and innovation."
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    
+    <!-- Performance: Resource Hints -->
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- SEO: Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- SEO: Meta Tags -->
+    <meta name="description" content={description} />
+    <meta name="keywords" content="UI/UX Designer, Web Developer, Digital Architect, React Developer, Frontend Developer, Figma Designer, Sustainability Tech, Jaipur, India" />
+    <meta name="author" content="Vaibhav Dadhich" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="generator" content="Astro" />
+    
+    <!-- SEO: Language and Location -->
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="geo.region" content="IN-RJ" />
+    <meta name="geo.placename" content="Jaipur" />
+    
+    <!-- SEO: Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://vaibhavdadhich.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Vaibhav Dadhich - UI/UX Designer & Web Developer" />
+    <meta property="og:site_name" content="Vaibhav Dadhich Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="en_IN" />
+    
+    <!-- SEO: Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://vaibhavdadhich.com/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Vaibhav Dadhich - UI/UX Designer & Web Developer" />
+    <meta name="twitter:site" content="@vaibhavdadhich" />
+    <meta name="twitter:creator" content="@vaibhavdadhich" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    
+    <!-- SEO: Alternative versions -->
+    <link rel="alternate" hreflang="en" href={canonicalURL} />
+    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+    
+    <!-- SEO: JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://vaibhavdadhich.com/#person",
+          "name": "Vaibhav Dadhich",
+          "url": "https://vaibhavdadhich.com",
+          "jobTitle": "UI/UX Designer & Web Developer",
+          "description": "A passionate tech enthusiast and visionary entrepreneur focused on building scalable, future-ready solutions that merge technology, sustainability, and innovation.",
+          "sameAs": [
+            "https://www.linkedin.com/in/vaibhav-dadhich",
+            "https://github.com",
+            "https://instagram.com",
+            "https://twitter.com"
+          ],
+          "knowsAbout": ["UI/UX Design", "Web Development", "React", "Figma", "Tailwind CSS", "Python", "Cybersecurity"],
+          "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "Rajasthan Technical University"
+          },
+          "worksFor": [
+            {
+              "@type": "Organization",
+              "name": "Addon Next Gen Pvt Ltd"
+            },
+            {
+              "@type": "Organization",
+              "name": "The Green Balance"
+            }
+          ],
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Jaipur",
+            "addressRegion": "Rajasthan",
+            "addressCountry": "IN"
+          },
+          "email": "vaibhavdadhich061@gmail.com"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://vaibhavdadhich.com/#website",
+          "url": "https://vaibhavdadhich.com",
+          "name": "Vaibhav Dadhich Portfolio",
+          "description": "Portfolio of Vaibhav Dadhich - UI/UX Designer & Web Developer",
+          "publisher": {
+            "@id": "https://vaibhavdadhich.com/#person"
+          },
+          "inLanguage": "en-US",
+          "copyrightYear": "2024",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://vaibhavdadhich.com/{search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://vaibhavdadhich.com/#organization",
+          "name": "The Green Balance",
+          "url": "https://vaibhavdadhich.com",
+          "description": "A content platform focused on environmental awareness and sustainability",
+          "image": "https://vaibhavdadhich.com/og-image.jpg",
+          "founder": {
+            "@id": "https://vaibhavdadhich.com/#person"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://vaibhavdadhich.com/#breadcrumb",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://vaibhavdadhich.com/"
+          }]
+        }
+      ]
+    })} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  html { 
+    scroll-behavior: smooth; 
+  }
+  body { 
+    overflow-x: hidden; 
+    background-color: #000; 
+    color: #e4e4e7; 
+  }
+  
+  @keyframes scan-horizontal {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(50%); }
+  }
+  .animate-scan-horizontal {
+    animation: scan-horizontal 4s linear infinite;
+  }
+  
+  /* Hide scrollbar for clean aesthetic */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #000; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+  
+  /* Performance optimizations */
+  .will-change-transform { will-change: transform; }
+  .gpu-accelerated { transform: translateZ(0); backface-visibility: hidden; }
+  
+  @keyframes shine {
+    to {
+      background-position: 200% center;
+    }
+  }
+</style>

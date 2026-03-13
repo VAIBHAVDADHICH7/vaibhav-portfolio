@@ -1,0 +1,578 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// ==========================================
+// 🎨 INLINE SVG ICONS (Replaces Lucide-React)
+// ==========================================
+const ICONS = {
+  Terminal: <><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></>,
+  ArrowUpRight: <><path d="M7 7h10v10"/><path d="M7 17 17 7"/></>,
+  Figma: <><path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5z"/><path d="M12 2h3.5a3.5 3.5 0 1 1 0 7H12V2z"/><path d="M12 12.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 1 1-7 0z"/><path d="M5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 1 1-7 0z"/><path d="M5 12.5A3.5 3.5 0 0 1 8.5 9H12v7H8.5A3.5 3.5 0 0 1 5 12.5z"/></>,
+  Code2: <><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></>,
+  BrainCircuit: <><path d="M12 5v14"/><path d="M19 12h-7"/><path d="M5 12h7"/><path d="M16 16v-4"/><path d="M8 8v4"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="16" cy="16" r="2"/><circle cx="8" cy="8" r="2"/></>,
+  Binary: <><rect x="14" y="14" width="4" height="6" rx="2"/><rect x="6" y="4" width="4" height="6" rx="2"/><path d="M6 20h4"/><path d="M14 4h4"/><path d="M6 14h2v6"/><path d="M14 4h2v6"/></>,
+  Database: <><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></>,
+  PenTool: <><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></>,
+  Briefcase: <><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></>,
+  GraduationCap: <><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></>,
+  Command: <><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></>,
+  Linkedin: <><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></>,
+  Github: <><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></>,
+  Mail: <><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></>,
+  Zap: <><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></>,
+  ShieldCheck: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></>,
+  Activity: <><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></>,
+  Instagram: <><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></>
+};
+
+const Icon = ({ name, size = 24, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    {ICONS[name]}
+  </svg>
+);
+
+// ==========================================
+// ⚙️ PERSONAL CONFIGURATION
+// ==========================================
+const ME = {
+  name: "Vaibhav Dadhich",
+  title: "UI/UX Designer & Web Developer",
+  tagline1: "Merging Technology.",
+  tagline2: "Innovating Sustainability.",
+  bio: "A passionate tech enthusiast and visionary entrepreneur driven to build scalable, future-ready solutions that merge technology, sustainability, and innovation. Currently running The Green Balance while pursuing my B.Tech CSE.",
+  email: "vaibhavdadhich061@gmail.com",
+  resumeLink: "#",
+  socials: {
+    linkedin: "https://www.linkedin.com/in/vaibhav-dadhich",
+    github: "https://github.com",
+    instagram: "https://instagram.com"
+  }
+};
+
+const PROJECTS = [
+  { id: 1, title: "The Green Balance", category: "Sustainability Platform", description: "A content platform focused on environmental awareness and sustainability, combining storytelling with actionable tech to inspire change.", tags: ["Web Development", "SEO Optimization", "Content Strategy"], size: "large", link: "#" },
+  { id: 2, title: "Addon Next Gen", category: "UI/UX Design", description: "Leading the design system architecture and user experience for enterprise solutions, bridging the gap between design and frontend engineering.", tags: ["UI/UX", "Figma", "Design Systems"], size: "small", link: "#" },
+  { id: 3, title: "SOC Dashboard", category: "Cybersecurity UX", description: "Leveraging my Certified SOC Analyst knowledge to design intuitive security operation center interfaces for rapid threat detection.", tags: ["Cybersecurity", "Dashboard UI", "React"], size: "small", link: "#" },
+  { id: 4, title: "Eco-Tech Ecosystem", category: "System Architecture", description: "Conceptual multimillion-dollar ecosystem blueprint aimed at empowering individuals and scaling innovative digital solutions for global impact.", tags: ["System Design", "Entrepreneurship", "GreenTech"], size: "medium", link: "#" }
+];
+
+const EXPERIENCE = [
+  { id: 1, role: "UI/UX Designer", company: "Addon Next Gen Pvt Ltd", duration: "Dec 2025 - Present", type: "work", description: "Designing scalable UI systems, creative branding, and collaborating on front-end development to deliver seamless digital experiences in Jaipur." },
+  { id: 2, role: "Founder & Creator", company: "The Green Balance", duration: "2023 - Present", type: "work", description: "Running a content platform focused on environmental awareness. Handling digital product strategy, custom template development, and SEO." },
+  { id: 3, role: "B.Tech Computer Science", company: "Rajasthan Technical University", duration: "Aug 2023 - Oct 2027", type: "edu", description: "Specializing in software engineering. Active in learning AI, cybersecurity (SOC Analyst), and web development technologies." }
+];
+
+const TECH_STACK = [
+  "Figma", "HTML5", "CSS3", "JavaScript", "Python", "React", "Tailwind CSS", "SEO", "Dreamweaver", "UI/UX Systems", "Blogger Templates"
+];
+
+const PROCESS_STEPS = [
+  { id: "01", title: "Discovery & Logic", description: "Mapping out system architecture, user flows, and technical constraints before a single pixel is drawn.", icon: "Database" },
+  { id: "02", title: "Wireframing & UX", description: "Creating low-fidelity structural blueprints to ensure cognitive ease and frictionless navigation.", icon: "PenTool" },
+  { id: "03", title: "High-Fidelity UI", description: "Applying the visual design system, typography hierarchy, and interaction models in Figma.", icon: "Figma" },
+  { id: "04", title: "Code Integration", description: "Translating the design into pixel-perfect, responsive, and animated React/Next.js components.", icon: "Code2" }
+];
+
+// ==========================================
+// 🔧 UI COMPONENTS & SECTIONS
+// ==========================================
+
+const CustomCursor = () => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  
+  useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    const handleMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
+    const handleOver = (e) => {
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.closest('button') || e.target.closest('a')) {
+        setIsHovering(true);
+      } else {
+        setIsHovering(false);
+      }
+    };
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseover', handleOver);
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('mouseover', handleOver);
+    };
+  }, []);
+
+  return (
+    <motion.div 
+      className="fixed top-0 left-0 pointer-events-none z-[9999] hidden lg:block"
+      animate={{ x: mousePos.x, y: mousePos.y }}
+      transition={{ type: 'spring', damping: 40, stiffness: 400, mass: 0.5 }}
+    >
+      <div className="relative -translate-x-1/2 -translate-y-1/2">
+        <motion.div 
+          animate={{ 
+            scale: isHovering ? 1.8 : 1, 
+            opacity: isHovering ? 0.4 : 0.8,
+            backgroundColor: isHovering ? '#818cf8' : 'transparent'
+          }}
+          className="absolute w-8 h-8 border-2 border-indigo-400 rounded-full transition-colors duration-300 shadow-[0_0_15px_rgba(99,102,241,0.5)]" 
+        />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,1)]" />
+      </div>
+    </motion.div>
+  );
+};
+
+const ImageStyleNav = () => {
+  return (
+    <div className="fixed top-8 left-0 w-full z-50 px-4 md:px-8 flex justify-center pointer-events-none">
+      <motion.div 
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="hidden xl:flex items-center w-full max-w-7xl h-[64px] bg-[#0A0A0B]/90 backdrop-blur-xl border border-white/10 rounded-full relative pointer-events-auto shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+      >
+        <div className="flex-1 flex items-center justify-between pl-8 pr-16 relative h-full">
+           <a href="#about" aria-label="Go to About section" className="font-mono text-[11px] tracking-[0.15em] text-zinc-300 hover:text-white uppercase transition-colors">ABOUT VAIBHAV</a>
+           <a href="#experience" aria-label="Go to Experience Timeline section" className="font-mono text-[11px] tracking-[0.15em] text-zinc-300 hover:text-white uppercase transition-colors">TIMELINE</a>
+           <a href="#work" aria-label="Go to Project Archive section" className="font-mono text-[11px] tracking-[0.15em] text-zinc-300 hover:text-white uppercase transition-colors">ARCHIVE</a>
+           <div className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-[1px] bg-white/20"></div>
+        </div>
+
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[86px] h-[86px] bg-[#f8f9fa] rounded-full flex items-center justify-center border-[8px] border-[#0A0A0B] shadow-[0_0_20px_rgba(79,70,229,0.3)] z-10 cursor-pointer hover:scale-105 hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] transition-all duration-300 group">
+           <Icon name="Terminal" size={32} className="text-black group-hover:text-indigo-600 transition-colors" />
+        </div>
+
+        <div className="flex-1 flex items-center justify-between pr-3 pl-16 relative h-full">
+           <div className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-[1px] bg-white/20"></div>
+           <a href="#services" aria-label="Go to Skills section" className="font-mono text-[11px] tracking-[0.15em] text-zinc-300 hover:text-white uppercase transition-colors">SKILLS</a>
+           <a href="#process" aria-label="Go to Process section" className="font-mono text-[11px] tracking-[0.15em] text-zinc-300 hover:text-white uppercase transition-colors">PROCESS</a>
+           <a href="#contact" aria-label="Go to Contact section" className="font-mono text-[11px] tracking-[0.15em] text-zinc-300 hover:text-white uppercase transition-colors">CONTACT</a>
+           <a href={ME.resumeLink} aria-label="View and download resume" className="ml-4 px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-indigo-500 hover:bg-indigo-500/20 text-white font-mono text-[11px] tracking-[0.15em] transition-all uppercase whitespace-nowrap shadow-inner">
+             ACCESS RESUME
+           </a>
+        </div>
+      </motion.div>
+
+      <motion.div 
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="xl:hidden flex items-center justify-between w-full h-[60px] bg-[#0A0A0B]/95 backdrop-blur-xl border border-white/10 rounded-full px-4 pointer-events-auto shadow-2xl"
+      >
+         <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border-2 border-black">
+           <Icon name="Terminal" size={18} className="text-black" />
+         </div>
+         <a href={ME.resumeLink} aria-label="View and download resume" className="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-white font-mono text-[10px] tracking-widest uppercase active:bg-white/10 transition-colors">
+           Access Resume
+         </a>
+      </motion.div>
+    </div>
+  );
+}
+
+const PremiumBackground = () => {
+  const particles = Array.from({ length: 12 }).map((_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    duration: Math.random() * 10 + 20,
+    delay: Math.random() * 5,
+  }));
+
+  return (
+    <div className="fixed inset-0 z-[-1] bg-[#030303] pointer-events-none overflow-hidden">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute w-1 h-1 bg-indigo-500/40 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.8)] will-change-transform"
+          style={{ left: p.left, top: p.top }}
+          animate={{ y: [0, -150], opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5] }}
+          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "linear" }}
+        />
+      ))}
+
+      <motion.div 
+        animate={{ x: ["-10%", "10%", "-10%"], y: ["-10%", "10%", "-10%"], scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-[-10%] left-1/4 w-[800px] h-[600px] bg-indigo-600/20 blur-[150px] rounded-full will-change-transform" 
+      />
+      <motion.div 
+        animate={{ x: ["10%", "-10%", "10%"], y: ["10%", "-10%", "10%"], scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-[-10%] right-1/4 w-[600px] h-[600px] bg-cyan-600/15 blur-[150px] rounded-full will-change-transform" 
+      />
+      
+      <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: `linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)`, backgroundSize: '32px 32px' }} />
+    </div>
+  );
+};
+
+const Hero = () => {
+  return (
+    <section id="about" className="relative min-h-screen flex items-center justify-center pt-20 px-6">
+      <div className="max-w-4xl mx-auto text-center relative z-10">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1, y: [0, -8, 0] }}
+          transition={{ opacity: { duration: 0.5 }, scale: { duration: 0.5 }, y: { duration: 4, repeat: Infinity, ease: "easeInOut" } }}
+          className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-indigo-500/40 bg-indigo-500/10 backdrop-blur-md mb-10 shadow-[0_0_20px_rgba(99,102,241,0.2)]"
+        >
+          <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_rgba(34,211,238,1)]" />
+          <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-widest text-indigo-200 font-bold">
+            {ME.name} | {ME.title}
+          </span>
+        </motion.div>
+
+        <div className="overflow-hidden mb-6">
+          <motion.h1 
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold text-white tracking-tighter leading-[1.1] md:leading-[1.05]"
+          >
+            {ME.tagline1.split(' ')[0]} <span className="text-zinc-500">{ME.tagline1.split(' ').slice(1).join(' ')}</span>
+          </motion.h1>
+        </div>
+        <div className="overflow-hidden mb-10">
+          <motion.h1 
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, type: "spring", bounce: 0.4 }}
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-300 to-indigo-400 tracking-tighter leading-[1.1] md:leading-[1.05]"
+            style={{ backgroundSize: '200% auto', animation: 'shine 5s linear infinite' }}
+          >
+            {ME.tagline2}
+          </motion.h1>
+        </div>
+
+        <motion.p 
+          initial={{ opacity: 0, filter: "blur(10px)" }}
+          animate={{ opacity: 1, filter: "blur(0px)" }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="max-w-2xl mx-auto text-zinc-400 text-sm sm:text-base md:text-lg font-normal leading-relaxed mb-12"
+        >
+          {ME.bio}
+        </motion.p>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+        >
+          <motion.a 
+            href="#work" 
+            aria-label="Explore project archive"
+            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(255,255,255,0.2)" }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full sm:w-auto px-10 py-4 bg-white text-black text-sm font-bold tracking-wide rounded-full flex items-center justify-center gap-3 transition-colors duration-300"
+          >
+            Explore Archive <Icon name="ArrowUpRight" size={18} />
+          </motion.a>
+          
+          <motion.a 
+            href={ME.resumeLink} 
+            target="_blank"
+            aria-label="View and download resume"
+            whileHover={{ scale: 1.05, backgroundColor: "rgba(79,70,229,0.1)", borderColor: "rgba(79,70,229,0.5)" }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full sm:w-auto px-10 py-4 bg-transparent border border-white/20 text-white text-sm font-bold tracking-wide rounded-full text-center transition-all duration-300 relative overflow-hidden group"
+          >
+            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[scan-horizontal_1s_ease-in-out]" />
+            Access Resume
+          </motion.a>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+const ProjectCard = ({ project }) => {
+  const isLarge = project.size === 'large';
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      whileHover={{ y: -10, scale: 1.02 }}
+      transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
+      className={`group relative overflow-hidden rounded-2xl bg-[#0a0a0a] border border-white/5 hover:border-indigo-500/50 shadow-2xl hover:shadow-[0_20px_50px_rgba(79,70,229,0.3)] flex flex-col z-10 ${isLarge ? 'md:col-span-2' : 'col-span-1'}`}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+      <div className="p-6 md:p-10 flex flex-col h-full relative z-10">
+        <div className="flex justify-between items-start mb-8 md:mb-12">
+          <div className="font-mono text-[9px] md:text-[10px] text-indigo-400 uppercase tracking-widest bg-indigo-500/10 px-4 py-1.5 rounded-full border border-indigo-500/20">
+            {project.category}
+          </div>
+          <motion.a 
+            href={project.link}
+            whileHover={{ rotate: 45, backgroundColor: "rgba(255,255,255,0.1)" }} 
+            className="text-zinc-500 group-hover:text-white transition-colors cursor-pointer p-3 bg-white/5 border border-white/10 rounded-full"
+          >
+            <Icon name="ArrowUpRight" size={18} />
+          </motion.a>
+        </div>
+        
+        <div className="mt-auto relative z-20">
+          <h3 className="text-2xl md:text-4xl font-semibold text-white tracking-tight mb-4 group-hover:text-indigo-200 transition-colors duration-300">
+            {project.title}
+          </h3>
+          <p className="text-zinc-400 text-sm md:text-base leading-relaxed mb-6 md:mb-8 max-w-xl group-hover:text-zinc-300 transition-colors">
+            {project.description}
+          </p>
+          
+          <div className="flex flex-wrap gap-2">
+            {project.tags.map(tag => (
+              <span key={tag} className="text-[10px] md:text-[11px] font-medium text-zinc-300 bg-black/50 px-3 py-1.5 rounded-md border border-white/10 group-hover:border-indigo-500/30 transition-colors">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <motion.div 
+          className="absolute -bottom-10 -right-10 w-48 h-48 bg-indigo-600/20 blur-[60px] opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none" 
+        />
+      </div>
+    </motion.div>
+  );
+};
+
+const ProcessSection = () => (
+  <section id="process" className="py-20 md:py-32 border-y border-white/5 bg-[#030303] overflow-hidden">
+    <div className="max-w-6xl mx-auto px-6">
+      <div className="text-center mb-16 md:mb-24">
+        <h2 className="font-mono text-[10px] md:text-[11px] text-indigo-400 tracking-[0.2em] uppercase mb-4">Execution Protocol</h2>
+        <h3 className="text-3xl md:text-5xl font-semibold tracking-tight text-white"><span className="text-indigo-500/30 mr-2">05</span>How I Build Systems.</h3>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 relative">
+        <motion.div 
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+          className="hidden md:block absolute top-12 left-[12%] right-[12%] h-[2px] bg-gradient-to-r from-indigo-900 via-indigo-400 to-indigo-900 z-0 origin-left shadow-[0_0_10px_rgba(99,102,241,0.5)]" 
+        />
+        
+        {PROCESS_STEPS.map((step, i) => (
+          <motion.div 
+            key={step.id} 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: i * 0.2 }}
+            className="relative z-10 flex flex-col items-center text-center"
+          >
+            <motion.div 
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              className="w-24 h-24 rounded-full bg-[#0a0a0a] border-2 border-white/10 flex items-center justify-center mb-6 shadow-xl relative group hover:border-indigo-400 transition-colors duration-300"
+            >
+              <div className="absolute inset-0 rounded-full bg-indigo-500/20 opacity-0 group-hover:opacity-100 blur-md transition-opacity" />
+              <div className="text-zinc-400 group-hover:text-white transition-colors relative z-10">
+                <Icon name={step.icon} size={20} />
+              </div>
+              <div className="absolute -bottom-3 bg-black px-3 py-0.5 font-mono text-[10px] text-indigo-300 border border-indigo-500/30 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.2)]">
+                {step.id}
+              </div>
+            </motion.div>
+            <h4 className="text-lg font-semibold text-white mb-3">{step.title}</h4>
+            <p className="text-sm text-zinc-500 leading-relaxed px-2 md:px-4">{step.description}</p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+const TechStackSection = () => (
+  <section className="py-20 md:py-32 overflow-hidden bg-[#000]">
+    <div className="max-w-6xl mx-auto px-6 mb-12">
+      <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+        <div className="w-full">
+          <h2 className="font-mono text-[10px] md:text-[11px] text-indigo-400 tracking-[0.2em] uppercase mb-4 animate-pulse">Core Dependencies</h2>
+          <h3 className="text-3xl md:text-4xl font-semibold tracking-tight text-white"><span className="text-indigo-500/30 mr-2">04</span>The Tech Stack.</h3>
+        </div>
+      </div>
+    </div>
+    
+    <div className="relative w-full overflow-hidden bg-white/[0.02] border-y border-white/5 py-8">
+      <div className="absolute inset-y-0 left-0 w-24 md:w-48 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-24 md:w-48 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+      
+      <motion.div 
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 25, ease: "linear", repeat: Infinity }}
+        className="flex whitespace-nowrap min-w-max gap-6 px-6"
+      >
+        {[...TECH_STACK, ...TECH_STACK].map((tech, i) => (
+          <div key={i} className="px-6 py-3 bg-[#0a0a0a] border border-white/10 rounded-xl font-mono text-sm md:text-base text-zinc-300 flex items-center shadow-lg hover:border-indigo-500/50 hover:text-indigo-300 transition-colors cursor-default">
+            <Icon name="Zap" size={14} className="text-indigo-500 mr-3 opacity-50" /> {tech}
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  </section>
+);
+
+const CompetencySection = () => (
+  <section id="services" className="py-20 md:py-32 relative">
+    <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-20 items-center">
+      <div>
+        <h2 className="text-3xl md:text-5xl font-semibold mb-6 tracking-tight text-white">
+          <span className="text-indigo-500/30 mr-2">03</span>The Engineering <br/>Designer Edge.
+        </h2>
+        <p className="text-zinc-400 text-sm md:text-base leading-relaxed mb-10 md:mb-12 max-w-md">
+          True innovation happens at the intersection of discipline. My technical background ensures that every design is not just beautiful, but highly feasible and scalable.
+        </p>
+        
+        <div className="space-y-8">
+          {[
+            { title: "Technical Visual Synthesis", desc: "Translating complex backend architectures into intuitive frontend experiences. No black boxes." },
+            { title: "Algorithmic UX Logic", desc: "Designing workflows that respect computational efficiency, state management, and edge cases." },
+            { title: "Systematic Design Ops", desc: "Building scalable design tokens and components that map perfectly 1:1 with React codebases." }
+          ].map((skill, i) => (
+            <div key={i} className="group flex gap-4 md:gap-6">
+              <div className="text-indigo-500/50 font-mono text-sm mt-1 group-hover:text-indigo-400 transition-colors">0{i+1}</div>
+              <div>
+                <h4 className="text-white font-medium mb-1 md:mb-2 text-sm md:text-base">{skill.title}</h4>
+                <p className="text-zinc-500 text-xs md:text-sm leading-relaxed">{skill.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <div className="relative flex justify-center items-center">
+          <div className="relative w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px]">
+             <div className="absolute inset-0 border border-white/10 rounded-full" />
+             <div className="absolute inset-6 md:inset-8 border border-white/5 rounded-full" />
+             
+             <div className="absolute inset-0 flex items-center justify-center">
+               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-tr from-indigo-500/20 to-cyan-500/20 blur-xl" />
+               <Icon name="ShieldCheck" size={48} className="absolute text-indigo-400 opacity-80" />
+             </div>
+             
+             <motion.div animate={{ rotate: 360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }} className="absolute inset-0">
+               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 md:w-3 md:h-3 bg-white rounded-full shadow-[0_0_10px_white]" />
+             </motion.div>
+          </div>
+      </div>
+    </div>
+  </section>
+);
+
+const ExperienceSection = () => (
+  <section id="experience" className="py-20 md:py-32 border-t border-white/5 bg-[#050505]">
+    <div className="max-w-4xl mx-auto px-6">
+      <div className="mb-16 md:mb-20 text-center md:text-left">
+        <h2 className="font-mono text-[10px] md:text-[11px] text-indigo-400 tracking-[0.2em] uppercase mb-4">System Logs</h2>
+        <h3 className="text-3xl md:text-5xl font-semibold tracking-tight text-white"><span className="text-indigo-500/30 mr-2">02</span>Experience Timeline.</h3>
+      </div>
+      
+      <div className="relative border-l border-white/10 pl-8 md:pl-12 space-y-16 ml-4 md:ml-0">
+        {EXPERIENCE.map((item) => (
+          <div key={item.id} className="relative group">
+            <div className="absolute -left-[41px] md:-left-[57px] top-1 w-5 h-5 md:w-6 md:h-6 bg-[#050505] border-2 border-indigo-500/30 rounded-full flex items-center justify-center group-hover:border-indigo-400 transition-colors">
+              <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-indigo-500 rounded-full group-hover:shadow-[0_0_10px_#818cf8] transition-all" />
+            </div>
+            
+            <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-3">
+              <h4 className="text-xl md:text-2xl font-semibold text-white tracking-tight">{item.role}</h4>
+              <span className="font-mono text-[10px] md:text-xs text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded border border-indigo-500/10 self-start md:self-auto">
+                {item.duration}
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-2 mb-4 text-zinc-400">
+              <Icon name={item.type === 'work' ? 'Briefcase' : 'GraduationCap'} size={14} />
+              <span className="text-sm font-medium">{item.company}</span>
+            </div>
+            
+            <p className="text-sm md:text-base text-zinc-500 leading-relaxed max-w-2xl">
+              {item.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+const ContactTerminal = () => (
+  <section id="contact" className="py-20 md:py-32">
+    <div className="max-w-4xl mx-auto px-6">
+      <div className="bg-[#0a0a0a] border border-white/10 rounded-3xl p-8 md:p-20 relative overflow-hidden">
+         <div className="absolute top-0 left-0 w-6 h-6 md:w-8 md:h-8 border-t border-l border-white/20 rounded-tl-3xl" />
+         <div className="absolute bottom-0 right-0 w-6 h-6 md:w-8 md:h-8 border-b border-r border-white/20 rounded-br-3xl" />
+         
+         <div className="text-center">
+           <h2 className="text-3xl sm:text-4xl md:text-6xl font-semibold tracking-tighter mb-4 md:mb-6 text-white"><span className="text-indigo-500/30 mr-2">01</span>Initialize Sync.</h2>
+           <p className="text-zinc-400 text-sm md:text-base leading-relaxed max-w-lg mx-auto mb-8 md:mb-10">
+             Currently accepting strategic design partnerships and high-impact UI/UX roles. Let's build software that matters.
+           </p>
+           
+           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a 
+                href={`mailto:${ME.email}`}
+                aria-label="Send email proposal"
+                className="w-full sm:w-auto px-8 py-4 bg-white text-black text-sm font-semibold rounded-full hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2"
+              >
+                Send Proposal <Icon name="Command" size={16} />
+              </a>
+              <div className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white/5 rounded-full p-2 border border-white/10">
+                 <a href={ME.socials.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Visit LinkedIn profile" className="p-3 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-colors"><Icon name="Linkedin" size={20} /></a>
+                 <a href={ME.socials.github} target="_blank" rel="noopener noreferrer" aria-label="Visit GitHub profile" className="p-3 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-colors"><Icon name="Github" size={20} /></a>
+                 <a href={ME.socials.instagram} target="_blank" rel="noopener noreferrer" aria-label="Visit Instagram profile" className="p-3 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-colors"><Icon name="Instagram" size={20} /></a>
+              </div>
+           </div>
+         </div>
+      </div>
+    </div>
+  </section>
+);
+
+export default function App() {
+  return (
+    <>
+      <CustomCursor />
+      <PremiumBackground />
+      <ImageStyleNav />
+
+      <main className="relative z-10 pt-10 pb-10 md:pb-20">
+        <Hero />
+        <ProcessSection />
+
+        <section id="work" className="py-20 md:py-32">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="mb-12 md:mb-20">
+              <h2 className="font-mono text-[10px] md:text-[11px] text-indigo-400 tracking-[0.2em] uppercase mb-4">Project Archive</h2>
+              <h3 className="text-3xl md:text-5xl font-semibold tracking-tight text-white"><span className="text-indigo-500/30 mr-2">06</span>Engineered Interfaces.</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-auto md:auto-rows-[400px]">
+              {PROJECTS.map(project => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <TechStackSection />
+        <CompetencySection />
+        <ExperienceSection />
+        <ContactTerminal />
+      </main>
+
+      <footer className="py-6 md:py-8 border-t border-white/5 bg-[#030303]">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="font-mono text-[9px] md:text-[10px] text-zinc-600 tracking-widest uppercase text-center md:text-left">
+            © {new Date().getFullYear()} {ME.name}. All rights reserved.
+          </div>
+          <div className="font-mono text-[9px] md:text-[10px] text-zinc-600 tracking-widest uppercase">
+            SYS_V 2.5.0
+          </div>
+        </div>
+      </footer>
+    </>
+  );
+}
