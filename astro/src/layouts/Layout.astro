@@ -19,12 +19,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     
-    <!-- Performance: Resource Hints -->
-    <link rel="preconnect" href="https://unpkg.com" />
-    <link rel="dns-prefetch" href="https://unpkg.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
     <!-- SEO: Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
     
@@ -40,28 +34,25 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- SEO: Language and Location -->
     <meta name="language" content="English" />
     <meta name="revisit-after" content="7 days" />
-    <meta name="geo.region" content="IN-RJ" />
-    <meta name="geo.placename" content="Jaipur" />
     
     <!-- SEO: Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://vaibhavdadhich.com/og-image.jpg" />
+    <meta property="og:image" content="/favicon.svg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Vaibhav Dadhich - UI/UX Designer & Web Developer" />
     <meta property="og:site_name" content="Vaibhav Dadhich Portfolio" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:locale:alternate" content="en_IN" />
     
     <!-- SEO: Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={canonicalURL} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://vaibhavdadhich.com/og-image.jpg" />
+    <meta name="twitter:image" content="/favicon.svg" />
     <meta name="twitter:image:alt" content="Vaibhav Dadhich - UI/UX Designer & Web Developer" />
     <meta name="twitter:site" content="@vaibhavdadhich" />
     <meta name="twitter:creator" content="@vaibhavdadhich" />
@@ -69,10 +60,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
-    
-    <!-- SEO: Alternative versions -->
-    <link rel="alternate" hreflang="en" href={canonicalURL} />
-    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
     
     <!-- SEO: JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -86,10 +73,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           "jobTitle": "UI/UX Designer & Web Developer",
           "description": "A passionate tech enthusiast and visionary entrepreneur focused on building scalable, future-ready solutions that merge technology, sustainability, and innovation.",
           "sameAs": [
-            "https://www.linkedin.com/in/vaibhav-dadhich",
-            "https://github.com",
-            "https://instagram.com",
-            "https://twitter.com"
+            "https://www.linkedin.com/in/vaibhav-dadhich/",
+            "https://github.com/VAIBHAVDADHICH7",
+            "https://www.instagram.com/vaibhavdadhich011/"
           ],
           "knowsAbout": ["UI/UX Design", "Web Development", "React", "Figma", "Tailwind CSS", "Python", "Cybersecurity"],
           "alumniOf": {
@@ -132,17 +118,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           }
         },
         {
-          "@type": "ProfessionalService",
-          "@id": "https://vaibhavdadhich.com/#organization",
-          "name": "The Green Balance",
-          "url": "https://vaibhavdadhich.com",
-          "description": "A content platform focused on environmental awareness and sustainability",
-          "image": "https://vaibhavdadhich.com/og-image.jpg",
-          "founder": {
-            "@id": "https://vaibhavdadhich.com/#person"
-          }
-        },
-        {
           "@type": "BreadcrumbList",
           "@id": "https://vaibhavdadhich.com/#breadcrumb",
           "itemListElement": [{
@@ -155,6 +130,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       ]
     })} />
   </head>
+
   <body>
     <slot />
   </body>

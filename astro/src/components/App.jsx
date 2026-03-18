@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// ==========================================
-// 🎨 INLINE SVG ICONS (Replaces Lucide-React)
-// ==========================================
 const ICONS = {
   Terminal: <><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></>,
   ArrowUpRight: <><path d="M7 7h10v10"/><path d="M7 17 17 7"/></>,
@@ -31,26 +28,26 @@ const Icon = ({ name, size = 24, className = "" }) => (
   </svg>
 );
 
-// ==========================================
-// ⚙️ PERSONAL CONFIGURATION
-// ==========================================
 const ME = {
   name: "Vaibhav Dadhich",
   title: "UI/UX Designer & Web Developer",
   tagline1: "Merging Technology.",
+
   tagline2: "Innovating Sustainability.",
   bio: "A passionate tech enthusiast and visionary entrepreneur driven to build scalable, future-ready solutions that merge technology, sustainability, and innovation. Currently running The Green Balance while pursuing my B.Tech CSE.",
   email: "vaibhavdadhich061@gmail.com",
   resumeLink: "#",
   socials: {
-    linkedin: "https://www.linkedin.com/in/vaibhav-dadhich",
-    github: "https://github.com",
-    instagram: "https://instagram.com"
-  }
+    linkedin: "https://www.linkedin.com/in/vaibhav-dadhich/",
+    github: "https://github.com/VAIBHAVDADHICH7",
+    instagram: "https://www.instagram.com/vaibhavdadhich011/"
+  },
+  resumeLink: "https://www.linkedin.com/in/vaibhav-dadhich/"
 };
 
 const PROJECTS = [
-  { id: 1, title: "The Green Balance", category: "Sustainability Platform", description: "A content platform focused on environmental awareness and sustainability, combining storytelling with actionable tech to inspire change.", tags: ["Web Development", "SEO Optimization", "Content Strategy"], size: "large", link: "#" },
+  { id: 1, title: "The Green Balance", category: "Sustainability Platform", description: "A content platform focused on environmental awareness and sustainability, combining storytelling with actionable tech to inspire change.", tags: ["Web Development", "SEO Optimization", "Content Strategy"], size: "large", link: "mailto:vaibhavdadhich061@gmail.com?subject=Green Balance Inquiry" },
+
   { id: 2, title: "Addon Next Gen", category: "UI/UX Design", description: "Leading the design system architecture and user experience for enterprise solutions, bridging the gap between design and frontend engineering.", tags: ["UI/UX", "Figma", "Design Systems"], size: "small", link: "#" },
   { id: 3, title: "SOC Dashboard", category: "Cybersecurity UX", description: "Leveraging my Certified SOC Analyst knowledge to design intuitive security operation center interfaces for rapid threat detection.", tags: ["Cybersecurity", "Dashboard UI", "React"], size: "small", link: "#" },
   { id: 4, title: "Eco-Tech Ecosystem", category: "System Architecture", description: "Conceptual multimillion-dollar ecosystem blueprint aimed at empowering individuals and scaling innovative digital solutions for global impact.", tags: ["System Design", "Entrepreneurship", "GreenTech"], size: "medium", link: "#" }
