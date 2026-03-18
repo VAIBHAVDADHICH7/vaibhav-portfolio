@@ -1,3 +1,7 @@
+# Indexing Headers - Allow search engines
+/*
+  X-Robots-Tag: index, follow
+
 # Cache Control Headers for Static Assets
 
 # HTML files - no cache for immediate updates
